@@ -45,8 +45,8 @@ _game_table_9 = [['', '', 'x'],
 # print('8', check_game_table(_game_table_9))
 # print(find_winner_position(_game_table_1))
 
-import os
-print(os.getcwd())
-path = os.environ['PYTHONPATH']
-os.environ['PYTHONPATH'] = path + ';' + os.getcwd()
-print(os.environ['PYTHONPATH'])
+# import os
+# print(os.getcwd())
+# path = os.environ['PYTHONPATH']
+# os.environ['PYTHONPATH'] = path + ';' + os.getcwd()
+# print(os.environ['PYTHONPATH'])
