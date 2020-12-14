@@ -9,7 +9,9 @@ def is_elem(seq: list):
 
 # Транспонируем матрицу
 def transpose(seq: list):
-    return [[item[i] for item in seq] for i in range(len(seq[0]))]
+    return [
+        [item[i] for item in seq] for i in range(len(seq[0]))
+    ]
 
 
 # Переворачиваем строку
@@ -103,7 +105,3 @@ class GameArea:
 
     def __str__(self):
         return '\n'.join('\t'.join(row) for row in self.game_table)
-
-
-if __name__ == '__main__':
-    pass

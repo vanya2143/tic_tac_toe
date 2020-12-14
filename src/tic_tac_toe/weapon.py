@@ -19,4 +19,3 @@ class Toc(Weapon):
 
 class Empty(Weapon):
     name = 'empty'
-

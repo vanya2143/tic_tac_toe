@@ -14,7 +14,7 @@ from .weapon import Tic, Toc
 class Game:
     _weapons = [Tic(), Toc()]
     _game_table = None
-    _next_move = None
+    _last_move = None
 
     def __init__(self, player1, player2):
         self._player1 = player1
