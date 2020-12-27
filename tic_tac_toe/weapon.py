@@ -1,6 +1,9 @@
 class Weapon:
     name = None
 
+    def __bool__(self):
+        return True
+
     def __str__(self):
         return self.name
 
@@ -10,12 +13,15 @@ class Weapon:
 
 
 class Tic(Weapon):
-    name = 'tik'
+    name = 'x'
 
 
-class Toc(Weapon):
-    name = 'tok'
+class Tac(Weapon):
+    name = 'o'
 
 
 class Empty(Weapon):
-    name = 'empty'
+    name = '.'
+
+    def __bool__(self):
+        return False

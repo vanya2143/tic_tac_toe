@@ -61,22 +61,18 @@ class GameArea:
     _values = 'xo'
 
     def __init__(self, game_table_size=3):
+        self._empty_obj = Empty()
         self._game_table_size = game_table_size
-        self._game_table = [[Empty()] * self._game_table_size for i in range(self._game_table_size)]
+        self._game_table = [[self._empty_obj] * self._game_table_size for i in range(self._game_table_size)]
 
     @property
     def game_table(self):
         return self._game_table
 
     def player_move(self, x, y, value):
-        if x > self._game_table_size < y:
-            raise GameAreaException(f'Out of game area size, valid size in {self._game_table_size}')
-        elif self._game_table[x][y]:
-            raise GameAreaException(f'This unit already used by - {self._game_table[x][y]}')
-        elif value not in self._values:
-            raise GameAreaException('Your weapon not true, use only x or o')
-
+        # TODO Проверка хода
         self._game_table[x][y] = value
+        self._check_winner()
 
         return self._check_winner()
 
@@ -104,4 +100,4 @@ class GameArea:
         return f'<Game area {self._game_table}>'
 
     def __str__(self):
-        return '\n'.join('\t'.join(row) for row in self.game_table)
+        return '\n'.join('\t'.join(i.name for i in row) for row in self.game_table)
