@@ -19,7 +19,7 @@ def reverse_row(seq: list):
     return [row[::-1] for row in seq]
 
 
-# Нахидим выиграшный елемент в таблице
+# Находим выиграшный елемент в таблице
 def find_win_row(checked_seq: list, t=False):
     if any(checked_seq):
         for index, elem in enumerate(checked_seq):
