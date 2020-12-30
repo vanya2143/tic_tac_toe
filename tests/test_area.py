@@ -5,6 +5,7 @@ from tic_tac_toe.area import GameAreaException
 
 from tic_tac_toe.weapon import Empty
 
+# Winner combinations
 winner_moves = {
     (False, 'left', 'x'): [[0, 0, 'x'], [1, 1, 'x'], [2, 2, 'x']],
     (True, 'right', 'x'): [[0, 2, 'x'], [1, 1, 'x'], [2, 0, 'x']],

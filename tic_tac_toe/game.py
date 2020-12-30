@@ -5,7 +5,7 @@
 
 from random import choice
 
-from .area import GameArea
+from .area import GameArea, GameAreaException
 from .weapon import Tic, Tac
 
 
@@ -32,17 +32,20 @@ class Game:
 
     def move(self, player_obj, x, y):
         if player_obj != self._last_move:
-            m = self._game_area.player_move(x, y, self.weapons.get(player_obj))
+            try:
+                m = self._game_area.player_move(x, y, self.weapons.get(player_obj))
+            except GameAreaException as e:
+                return e, self._game_area
 
             self._last_move = player_obj
 
-            if m:
+            if isinstance(m, tuple):
                 return f'Winner {m}', self._game_area
             else:
                 return 0, self._game_area
 
         else:
-            return f'Now not your move, please wait!'
+            return 'Now not your move, please wait!'
 
     def __str__(self):
         return f'{self._player1.nickname} vs {self._player2.nickname}'

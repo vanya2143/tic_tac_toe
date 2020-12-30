@@ -44,19 +44,22 @@ if action == 's':
         # Game loop
         while True:
             player = players[first_player_index]
-            clean_area()
+            # clean_area()
 
             # Show game area
-            print(game, f'Last move: {last_move[0]} - {last_move[1]}')
+            print(game, f'\nLast move: {last_move[0]} - {last_move[1]}')
             print(game.show_game_table())
 
             string = f'{player.nickname} can move, your weapon: {game.weapons.get(player)} --> x, y: '
-            game_action = tuple(map(int, input(string).split(',')))
+            game_action = input(string)
 
             if game_action == 'Q':
                 sys.exit(0)
             elif game_action == 'q':
                 break
+
+            print(game_action)
+            user_action = tuple(map(int, game_action.split(',')))
 
             # Current player flag
             if first_player_index:
@@ -64,10 +67,10 @@ if action == 's':
             else:
                 first_player_index = 1
 
-            last_move = player, game_action
-            move = game.move(player, *game_action)
+            last_move = player, user_action
+            move = game.move(player, *user_action)
             if move[0]:
-                clean_area()
+                # clean_area()
                 print(game, f'Last move: {last_move[0].nickname} - {last_move[1]}')
                 print(game.show_game_table())
                 print(f'Winner: {player}, weapon: {game.weapons.get(player)}')

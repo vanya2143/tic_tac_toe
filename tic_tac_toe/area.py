@@ -59,11 +59,20 @@ class GameAreaException(Exception):
 
 class GameArea:
     _values = 'xo'
+    # TODO Проверять кол-во возможных ходов
+    _free_moves = 9
 
     def __init__(self, game_table_size=3):
         self._empty_obj = Empty()
         self._game_table_size = game_table_size
-        self._game_table = [[self._empty_obj] * self._game_table_size for i in range(self._game_table_size)]
+        self._game_table = self.create_area(self._empty_obj, self._game_table_size)
+
+    @staticmethod
+    def create_area(item_obj, size):
+        area = []
+        for i in range(size):
+            area.append([item_obj] * size)
+        return area
 
     @property
     def game_table(self):
@@ -71,6 +80,9 @@ class GameArea:
 
     def player_move(self, x, y, value):
         # TODO Проверка хода
+        if self._game_table[x][y]:
+            raise GameAreaException('Unit not empty')
+
         self._game_table[x][y] = value
         self._check_winner()
 

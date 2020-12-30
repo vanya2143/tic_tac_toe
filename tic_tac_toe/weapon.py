@@ -1,9 +1,6 @@
 class Weapon:
     name = None
 
-    def __bool__(self):
-        return True
-
     def __str__(self):
         return self.name
 
@@ -23,5 +20,5 @@ class Tac(Weapon):
 class Empty(Weapon):
     name = '.'
 
-    def __bool__(self):
-        return False
+    def __len__(self):
+        return 0
