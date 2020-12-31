@@ -1,8 +1,18 @@
+class Colors:
+    GREEN = '\033[92m'
+    DEFAULT = '\033[0m'
+
+
 class Weapon:
     name = None
+    colors = Colors
+    current_color = colors.DEFAULT
+
+    def to_green(self):
+        self.current_color = self.colors.GREEN
 
     def __str__(self):
-        return self.name
+        return f'{self.current_color}{self.name}{self.colors.DEFAULT}'
 
     def __repr__(self):
         cls = type(self)
@@ -20,5 +30,5 @@ class Tac(Weapon):
 class Empty(Weapon):
     name = '.'
 
-    def __len__(self):
-        return 0
+    def __bool__(self):
+        return False

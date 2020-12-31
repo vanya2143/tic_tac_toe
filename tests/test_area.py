@@ -2,22 +2,8 @@ import pytest
 
 from tic_tac_toe.area import GameArea
 from tic_tac_toe.area import GameAreaException
-
-from tic_tac_toe.weapon import Empty
-
-# Winner combinations
-winner_moves = {
-    (False, 'left', 'x'): [[0, 0, 'x'], [1, 1, 'x'], [2, 2, 'x']],
-    (True, 'right', 'x'): [[0, 2, 'x'], [1, 1, 'x'], [2, 0, 'x']],
-
-    (False, 0, 'x'): [[0, 0, 'x'], [0, 1, 'x'], [0, 2, 'x']],
-    (False, 1, 'x'): [[1, 0, 'x'], [1, 1, 'x'], [1, 2, 'x']],
-    (False, 2, 'x'): [[2, 0, 'x'], [2, 1, 'x'], [2, 2, 'x']],
-
-    (True, 0, 'x'): [[0, 0, 'x'], [1, 0, 'x'], [2, 0, 'x']],
-    (True, 1, 'x'): [[0, 1, 'x'], [1, 1, 'x'], [2, 1, 'x']],
-    (True, 2, 'x'): [[0, 2, 'x'], [1, 2, 'x'], [2, 2, 'x']],
-}
+from tic_tac_toe.weapon import Empty, Tic, Tac
+from tic_tac_toe.utils import ref_data
 
 
 # Initial area object
@@ -45,10 +31,15 @@ def test_move(game_area_obj):
 
 @pytest.mark.area_negative_mark
 @pytest.mark.xfail(reason='This unit does not empty!', raises=GameAreaException)
-def test_move_fail_not_empty(game_area_obj):
-    pass
+def test_move_fail_not_empty():
+    ga = GameArea()
+    tic = Tic()
+    ga.player_move(0, 0, tic)
+
+    assert ga.player_move(0, 0, tic) == GameAreaException
 
 
+# TODO Уедет в тесты игрового движка
 @pytest.mark.area_negative_mark
 @pytest.mark.xfail(reason='This weapon does not allowed!', raises=GameAreaException)
 def test_move_fail_allowed_weapon(game_area_obj):
@@ -56,17 +47,17 @@ def test_move_fail_allowed_weapon(game_area_obj):
 
 
 @pytest.mark.area_negative_mark
-@pytest.mark.xfail(reason='This move does not in allowed area range!', raises=GameAreaException)
+@pytest.mark.xfail(reason='Game area index out of range', raises=GameAreaException)
 def test_move_fail_out_of_range(game_area_obj):
-    pass
+    assert game_area_obj.player_move(10, 10, 'x') == GameAreaException
 
 
 # Check winner combinations
 @pytest.mark.area_positive_mark
 def test_check_winner():
-    for key, moves in winner_moves.items():
+    for moves in ref_data:
         ga = GameArea()
         for cur_move, move in enumerate(moves):
-            m = ga.player_move(*move)
+            ga.player_move(move[0], move[1], 'x')
             if cur_move == 2:
-                assert m == key
+                assert ga.check_winner() == ('x', moves)
