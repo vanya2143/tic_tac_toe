@@ -58,6 +58,10 @@ class GameAreaException(Exception):
     pass
 
 
+class GameAreaUnitException(GameAreaException):
+    pass
+
+
 class GameArea:
     _free_moves = 9
 
@@ -74,8 +78,12 @@ class GameArea:
         return area
 
     @property
-    def game_table(self):
+    def show_game_table(self):
         return self._game_table
+
+    @property
+    def free_moves(self):
+        return self._free_moves
 
     def player_move(self, x, y, value):
         # TODO Проверка хода
@@ -83,7 +91,7 @@ class GameArea:
             raise GameAreaException('Game area index out of range')
         if self._free_moves:
             if self._game_table[x][y]:
-                raise GameAreaException('Unit not empty')
+                raise GameAreaUnitException('Unit not empty')
 
             self._game_table[x][y] = value
             self._free_moves -= 1
@@ -98,10 +106,10 @@ class GameArea:
     #         return win_position
 
     def check_winner(self):
-        return finder(self.game_table, ref_data)
+        return finder(self.show_game_table, ref_data)
 
     def __repr__(self):
         return f'<Game area {self._game_table}>'
 
     def __str__(self):
-        return '\n'.join('\t'.join(i.name for i in row) for row in self.game_table)
+        return '\n'.join('\t'.join(i.name if isinstance(i, Empty) else i for i in row) for row in self.show_game_table)

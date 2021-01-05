@@ -5,17 +5,20 @@
 
 from random import choice
 
-from .area import GameArea, GameAreaException
+from .area import GameArea, GameAreaException, GameAreaUnitException
 from .weapon import Tic, Tac
 
 
-# TODO Game table будет отдельным объектом
+class GameException(Exception):
+    pass
+
+
 class Game:
     _game_area = None
     _last_move = None
 
     def __init__(self, player1, player2):
-        self._weapons = [Tic(), Tac()]
+        self._weapons = ['x', 'o']
         self._player1 = player1
         self._player2 = player2
 
@@ -31,21 +34,15 @@ class Game:
         self._game_area = GameArea()
 
     def move(self, player_obj, x, y):
-        if player_obj != self._last_move:
-            try:
-                m = self._game_area.player_move(x, y, self.weapons.get(player_obj))
-            except GameAreaException as e:
-                return e, self._game_area
+        if player_obj == self._last_move:
+            raise GameException('This player already moved')
 
-            self._last_move = player_obj
-
-            if isinstance(m, tuple):
-                return f'Winner {m}', self._game_area
-            else:
-                return 0, self._game_area
-
+        self._game_area.player_move(x, y, self.weapons.get(player_obj))
+        winner = self._game_area.check_winner()
+        if winner:
+            return winner
         else:
-            return 'Now not your move, please wait!'
+            self._last_move = player_obj
 
     def __str__(self):
         return f'{self._player1.nickname} vs {self._player2.nickname}'

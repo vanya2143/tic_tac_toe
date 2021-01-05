@@ -14,7 +14,7 @@ def game_area_obj():
 
 @pytest.mark.area_positive_mark
 def test_game_table(game_area_obj):
-    assert isinstance(game_area_obj.game_table[0][0], Empty)
+    assert isinstance(game_area_obj.show_game_table[0][0], Empty)
 
 
 # Test move
@@ -24,9 +24,9 @@ def test_move(game_area_obj):
     _ = game_area_obj.player_move(1, 1, 'o')
     _ = game_area_obj.player_move(2, 2, 'x')
 
-    assert game_area_obj.game_table[0][0] == 'x'
-    assert game_area_obj.game_table[1][1] == 'o'
-    assert game_area_obj.game_table[2][2] == 'x'
+    assert game_area_obj.show_game_table[0][0] == 'x'
+    assert game_area_obj.show_game_table[1][1] == 'o'
+    assert game_area_obj.show_game_table[2][2] == 'x'
 
 
 @pytest.mark.area_negative_mark
