@@ -14,11 +14,18 @@ ref_data = (
     ((0, 2), (1, 1), (2, 0)),
 )
 
+
 # arr = [
 #     ['', '', ''],
 #     ['', '', ''],
 #     ['', '', ''],
 # ]
+
+class Colors:
+    OKGREEN = '\u001b[38;5;82m'
+    ENDC = '\u001b[0m'
+    WHITE = '\u001b[38;5;255m'
+    SILVER = '\u001b[38;5;249m'
 
 
 def finder(game_table: list, r_data: tuple):
