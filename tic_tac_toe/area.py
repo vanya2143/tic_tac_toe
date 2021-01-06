@@ -87,7 +87,7 @@ class GameArea:
 
     def player_move(self, x, y, value):
         # TODO Проверка хода
-        if x > self._game_table_size < y:
+        if x > self._game_table_size or self._game_table_size < y:
             raise GameAreaException('Game area index out of range')
         if self._free_moves:
             if self._game_table[x][y]:

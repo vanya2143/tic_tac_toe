@@ -1,9 +1,12 @@
 import os
 import sys
 from random import choice
+from copy import deepcopy
 
-from tic_tac_toe.game import Game
+from tic_tac_toe.game import Game, GameException
 from tic_tac_toe.player import Player
+from tic_tac_toe.area import GameAreaUnitException, GameAreaException
+from tic_tac_toe.weapon import Colors, Empty
 
 
 def clean_area():
@@ -13,17 +16,41 @@ def clean_area():
         os.system('clear')
 
 
-player1 = input('Enter player1 name: ')
-player2 = input('Enter player2 name: ')
+def draw_area(game_table: list):
+    game_t = [['#', '0', '1', '2'], ['0'], ['1'], ['2']]
 
-p1 = Player(str(player1))
-p2 = Player(str(player2))
+    for index, row in enumerate(game_table, 1):
+        game_t[index].extend(row)
+
+    return '\n'.join('  '.join(i.name if isinstance(i, Empty) else i for i in row) for row in game_t)
+
+
+def to_green(item):
+    return f'{Colors.OKGREEN}{item}{Colors.ENDC}'
+
+
+def colorize(game_table, win_array: tuple):
+    for row in win_array:
+        item = game_table[row[0]][row[1]]
+        game_table[row[0]][row[1]] = to_green(item)
+
+    return game_table
+
+
+# player1 = input('Enter player1 name: ')
+# player2 = input('Enter player2 name: ')
+
+# p1 = Player(str(player1))
+# p2 = Player(str(player2))
+
+p1 = Player('Player1')
+p2 = Player('Player2')
 
 print('')
 print('s to start game')
 print('q exit')
 
-action = str(input('--->'))
+action = str(input('---> '))
 
 if action == 'q':
     sys.exit(0)
@@ -32,25 +59,25 @@ if action == 's':
     # Game session loop
     game_flag = True
     while game_flag:
+        # Init game
         game = Game(p1, p2)
-        game.start_game()
-        players = [p1, p2]
-        first_player = choice(players)
-        first_player_index = players.index(first_player)
-        last_move = [None, None]
+        players, first_player = game.start_game()
 
-        print(game.show_game_table())
+        last_move = ['', '']
+        winner = False
+        messages = []
 
         # Game loop
         while True:
-            player = players[first_player_index]
+            player = game.get_current_player()
             # clean_area()
 
             # Show game area
+            print(messages)
             print(game, f'\nLast move: {last_move[0]} - {last_move[1]}')
-            print(game.show_game_table())
+            print(draw_area(game.show_game_table))
 
-            string = f'{player.nickname} can move, your weapon: {game.weapons.get(player)} --> x, y: '
+            string = f'{player.nickname} is moving, weapon: {game.weapons.get(player)} --> : '
             game_action = input(string)
 
             if game_action == 'Q':
@@ -61,23 +88,36 @@ if action == 's':
             print(game_action)
             user_action = tuple(map(int, game_action.split(',')))
 
-            # Current player flag
-            if first_player_index:
-                first_player_index = 0
-            else:
-                first_player_index = 1
+            # Actions
+            try:
+                moved_player, winner = game.move(player, *user_action)
+                last_move = moved_player.nickname, user_action
+            except GameAreaUnitException:
+                messages.append('This unit not empty!')
+                print('This unit not empty!')
+                continue
+            except GameAreaException:
+                print('Out of game area range')
+                continue
+            except GameException as e:
+                print(e)
 
-            last_move = player, user_action
-            move = game.move(player, *user_action)
-            if move[0]:
-                # clean_area()
-                print(game, f'Last move: {last_move[0].nickname} - {last_move[1]}')
-                print(game.show_game_table())
-                print(f'Winner: {player}, weapon: {game.weapons.get(player)}')
+            if winner:
+                clean_area()
+                print(messages)
+                print(game, f'\nLast move: {last_move[0]} - {last_move[1]}')
+                print(f'Winner {moved_player.nickname}, weapon {winner[0]}')
+                gt = game.show_game_table
+                print(draw_area(colorize(gt, winner[1])))
 
-                question = input('Try again? y,n ')
+                question = input('\nTry again? y/[n] ')
                 if question == 'n':
                     game_flag = False
                     break
                 elif question == 'y':
                     break
+                else:
+                    game_flag = False
+                    break
+
+            print(f'{"*" * 20}\n\n')
