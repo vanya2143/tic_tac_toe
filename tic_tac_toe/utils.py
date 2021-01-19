@@ -27,6 +27,26 @@ class Colors:
     WHITE = '\u001b[38;5;255m'
     SILVER = '\u001b[38;5;249m'
 
+    B_STYLE_BOLD = '\u001b[1m'
+    STYLE_REVERSED = '\u001b[7m'
+    STYLE_UNDERLINE = '\u001b[4m'
+
+    @classmethod
+    def to_green(cls, item):
+        return f'{cls.OKGREEN}{item}{cls.ENDC}'
+
+    @classmethod
+    def bold(cls, item):
+        return f'{cls.B_STYLE_BOLD}{item}{cls.ENDC}'
+
+    @classmethod
+    def underline(cls, item):
+        return f'{cls.STYLE_UNDERLINE}{item}{cls.ENDC}'
+
+    @classmethod
+    def reverse(cls, item):
+        return f'{cls.STYLE_REVERSED}{item}{cls.ENDC}'
+
 
 def finder(game_table: list, r_data: tuple):
     for elem in r_data:
