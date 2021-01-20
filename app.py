@@ -61,7 +61,12 @@ def draw(game_obj, last_moved, with_color=False, win=None):
 
 
 def context_menu():
-    pass
+    # Context menu
+    question = input('\nTry again? y/[n] ')
+    if question == 'y':
+        return True
+    else:
+        return False
 
 
 # player1 = input('Enter player1 name: ')
@@ -107,12 +112,14 @@ if action == 's':
                 print('No free moves')
 
                 # Context menu
-                question = input('\nTry again? y/[n] ')
-                if question == 'y':
-                    break
-                else:
-                    game_session_flag = False
-                    break
+                # question = input('\nTry again? y/[n] ')
+                # if question == 'y':
+                #     break
+                # else:
+                #     game_session_flag = False
+                #     break
+                game_session_flag = context_menu()
+                break
 
             # TODO Система уведомлений
             print()
@@ -134,7 +141,7 @@ if action == 's':
             try:
                 user_action = tuple(map(int, game_action.split(',')))
             except ValueError:
-                messages.append('Use integers with coma separate: 1,1')
+                messages.append('Use integers with coma separate: row,column')
                 continue
 
             # Actions
@@ -144,10 +151,6 @@ if action == 's':
             except GameAreaUnitException:
                 messages.append('This unit not empty!')
                 continue
-            except GameAreaIndexException:
-                continue
-            except GameException as e:
-                print(e)
 
             # If player win
             if winner:
@@ -155,11 +158,14 @@ if action == 's':
                 print(f'Winner {moved_player.nickname}, weapon {winner[0].name}')
 
                 # Context menu
-                question = input('\nTry again? y/[n] ')
-                if question == 'y':
-                    break
-                else:
-                    game_session_flag = False
-                    break
+                # question = input('\nTry again? y/[n] ')
+                # if question == 'y':
+                #     break
+                # else:
+                #     game_session_flag = False
+                #     break
+
+                game_session_flag = context_menu()
+                break
 
             print(f'{"*" * 20}\n\n')
