@@ -17,6 +17,7 @@ class Game:
         self._player1 = player1
         self._player2 = player2
 
+        # Equipment players of random weapon
         self.weapons = {
             self._player1: self._weapons.pop(choice(range(2))),
             self._player2: self._weapons.pop()
@@ -37,15 +38,15 @@ class Game:
     def start_game(self):
         self._game_area = GameArea()
 
-    def move(self, player_obj, x, y):
+    def move(self, player_obj, row, column):
         if player_obj == self._last_move:
             raise GameException('This player has just made a move')
 
-        self._game_area.player_move(x, y, self.weapons.get(player_obj))
+        self._game_area.player_move(row, column, self.weapons.get(player_obj))
         winner = self._game_area.check_winner()
 
         if winner:
-            return player_obj, winner
+            return winner
         else:
             self._last_move = player_obj
 
@@ -55,7 +56,7 @@ class Game:
             else:
                 self.first_player_index = 1
 
-            return player_obj, False
+            return False
 
     def __str__(self):
         return f'{self._player1.nickname} vs {self._player2.nickname}'

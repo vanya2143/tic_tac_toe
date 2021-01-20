@@ -5,7 +5,7 @@ class Weapon:
     name = None
 
     def __str__(self):
-        return f'{Colors.WHITE}{self.name}{Colors.ENDC}'
+        return self.name
 
     def __repr__(self):
         cls = type(self)

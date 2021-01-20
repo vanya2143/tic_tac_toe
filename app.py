@@ -8,8 +8,6 @@ from tic_tac_toe.weapon import Weapon
 from tic_tac_toe.utils import Colors
 
 
-# TODO Добавить отображение сообщений
-
 def clean_area():
     if sys.platform == 'win32':
         os.system('cls')
@@ -49,9 +47,9 @@ def draw(game_obj, last_moved, with_color=False, win=None):
     clean_area()
 
     last_player = last_moved[0]
-    player_move = last_moved[1]
+    coordinates = last_moved[1]
 
-    print(f'{Colors.underline(game_obj)}', f'\nLast move: {last_player} - {player_move}')
+    print(f'{Colors.underline(game_obj)}', f'\nLast move: {last_player} - {coordinates}')
 
     # If we have a winner we use colorize()
     if with_color:
@@ -60,8 +58,8 @@ def draw(game_obj, last_moved, with_color=False, win=None):
         print(create_game_map(game_obj.show_game_table()))
 
 
+# Show question after game
 def context_menu():
-    # Context menu
     question = input('\nTry again? y/[n] ')
     if question == 'y':
         return True
@@ -102,69 +100,59 @@ if action == 's':
 
         # Current game loop
         while current_game_flag:
-            player = game.get_current_player()
-            # Draw game
-            draw(game, last_move)
 
-            # If free moves is 0
+            # Free moves check block
             if not game.free_moves():
                 draw(game, last_move)
-                print('No free moves')
+                print()
+                print(f'{Colors.reverse("No free moves")}')
 
-                # Context menu
-                # question = input('\nTry again? y/[n] ')
-                # if question == 'y':
-                #     break
-                # else:
-                #     game_session_flag = False
-                #     break
                 game_session_flag = context_menu()
                 break
 
-            # TODO Система уведомлений
+            # Draw game
+            draw(game, last_move)
+
+            # Messages block
             print()
             if messages:
                 print(f'{Colors.reverse(messages.pop())}')
                 messages.clear()
 
+            # Input block
+            player = game.get_current_player()
             string = f'{Colors.bold(player.nickname)} is moving, weapon: ' \
                      f'{Colors.bold(game.weapons.get(player).name)} (row,column) \n--> '
 
-            game_action = input(string)
+            input_coordinates = input(string)
 
-            if game_action == 'Q':
+            # Parse input block for specific keys
+            if input_coordinates == 'Q':
                 sys.exit(0)
-            elif game_action == 'q':
+            elif input_coordinates == 'q':
                 break
 
-            # Parse user input
+            # Parse input coordinates block
             try:
-                user_action = tuple(map(int, game_action.split(',')))
+                user_coordinates = tuple(map(int, input_coordinates.split(',')))
             except ValueError:
                 messages.append('Use integers with coma separate: row,column')
                 continue
 
-            # Actions
+            # Submit users coordinates block
             try:
-                moved_player, winner = game.move(player, *user_action)
-                last_move = moved_player.nickname, game_action
+                winner = game.move(player, *user_coordinates)  # -> Bool or weapon_obj, Bool
+                last_move = player.nickname, input_coordinates
             except GameAreaUnitException:
-                messages.append('This unit not empty!')
+                messages.append('This unit is not empty!')
                 continue
 
-            # If player win
+            # Check winner block
             if winner:
                 draw(game, last_move, True, winner[1])
-                print(f'Winner {moved_player.nickname}, weapon {winner[0].name}')
+                print(f'Winner {player.nickname}, weapon {winner[0].name}')
 
                 # Context menu
-                # question = input('\nTry again? y/[n] ')
-                # if question == 'y':
-                #     break
-                # else:
-                #     game_session_flag = False
-                #     break
-
                 game_session_flag = context_menu()
                 break
 

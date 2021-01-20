@@ -20,10 +20,9 @@ class GameArea:
     def __init__(self, game_table_size=3):
         self._empty_obj = Empty()
         self._game_table_size = game_table_size
-        self._game_table = self.create_area(self._empty_obj, self._game_table_size)
+        self._game_table = self.__create_area(self._empty_obj, self._game_table_size)
 
-    @staticmethod
-    def create_area(item_obj, size):
+    def __create_area(self, item_obj, size):
         area = []
         for i in range(size):
             area.append([item_obj] * size)
@@ -37,14 +36,14 @@ class GameArea:
     def free_moves(self):
         return self._free_moves
 
-    def player_move(self, x, y, value):
-        if x > self._game_table_size or self._game_table_size < y:
+    def player_move(self, row, column, value):
+        if row > self._game_table_size or self._game_table_size < column:
             raise GameAreaIndexException('Game area index out of range')
         if self._free_moves:
-            if self._game_table[x][y]:
+            if self._game_table[row][column]:
                 raise GameAreaUnitException('Unit not empty')
 
-            self._game_table[x][y] = value
+            self._game_table[row][column] = value
             self._free_moves -= 1
         else:
             raise GameAreaException('Free moves 0')
