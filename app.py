@@ -1,7 +1,7 @@
 import os
 import sys
 
-from tic_tac_toe.game import Game, GameException
+from tic_tac_toe.game import Game
 from tic_tac_toe.player import Player
 from tic_tac_toe.area import GameAreaUnitException, GameAreaIndexException
 from tic_tac_toe.weapon import Weapon, Staff
