@@ -50,19 +50,19 @@ def draw_frame(game_obj, last_moved, _win_obj, msg_tray):
 
     # If we have a winner we use colorize()
     if _win_obj:
-        print(create_game_map(colorize(game_obj.show_game_table(), _win_obj[1])))
+        print(create_game_map(colorize(game_obj.show_game_table(), _win_obj[1])), end='\n\n')
         print(f'Winner {player.nickname}, weapon {_win_obj[0].name}')
         _game_flag = context_menu()
         return _game_flag
     else:
-        print(create_game_map(game_obj.show_game_table()))
+        print(create_game_map(game_obj.show_game_table()), end='\n\n')
 
     if not game_obj.free_moves():
-        print(f'\n{Colors.reverse("No free moves")}')
+        print(f'{Colors.reverse("No free moves")}')
         return context_menu()
 
     if msg_tray:
-        print(f'\n{Colors.reverse(messages.pop())}')
+        print(f'{Colors.reverse(messages.pop())}')
         messages.clear()
 
 
@@ -114,20 +114,18 @@ if action == 's':
 
         # Current game loop
         while current_game_flag:
-
+            # Show current game
             flag = draw_frame(game, last_move, winner, messages)  # -> Bool
             if flag:
                 break
-            elif not flag:
+            elif not flag and flag is not None:
                 print('Bye!')
                 sys.exit(0)
 
-            # Input block
             player = game.get_current_player()
             string = f'{Colors.bold(player.nickname)} is moving, weapon: ' \
                      f'{Colors.bold(game.weapons.get(player).name)} (row,column) \n--> '
 
-            # Game back block
             try:
                 input_coordinates = input(string)
             except (EOFError, KeyboardInterrupt):
@@ -138,14 +136,14 @@ if action == 's':
             if input_coordinates == 'r':
                 break
 
-            # Parse input coordinates block
+            # Parse input coordinates
             try:
                 coordinates = tuple(map(int, input_coordinates.split(',')))
             except ValueError:
                 messages.append('Use integers with coma separate: row,column')
                 continue
 
-            # Submit users coordinates block
+            # Submit users coordinates
             try:
                 winner = game.move(player, *coordinates)  # -> Union[Tuple[list, Any], bool
                 last_move = player.nickname, input_coordinates
