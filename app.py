@@ -4,7 +4,7 @@ import sys
 from tic_tac_toe.game import Game, GameException
 from tic_tac_toe.player import Player
 from tic_tac_toe.area import GameAreaUnitException, GameAreaIndexException
-from tic_tac_toe.weapon import Weapon
+from tic_tac_toe.weapon import Weapon, Staff
 from tic_tac_toe.utils import Colors
 
 
@@ -17,20 +17,18 @@ def clean_area():
 
 # Add staff data to game table
 def create_game_map(game_table: list):
-    game_t = [['#', '0', '1', '2'], ['0'], ['1'], ['2']]
-    set_game_style(game_t)
+    game_t = [
+        [Staff('#'), Staff('0'), Staff('1'), Staff('2')],
+        [Staff('0')],
+        [Staff('1')],
+        [Staff('2')]
+    ]
 
     for index, row in enumerate(game_table, 1):
         game_t[index].extend(row)
 
+    # If we have a winner, his weapon object will be replaced to string
     return '\n'.join('  '.join(i.name if issubclass(type(i), Weapon) else i for i in row) for row in game_t)
-
-
-def set_game_style(seq):
-    for r_index, row in enumerate(seq):
-        for el_index, elem in enumerate(row):
-            item = elem
-            seq[r_index][el_index] = f'{Colors.bold(item)}'
 
 
 # Set color for win items
@@ -110,6 +108,7 @@ if action == 's':
                 game_session_flag = context_menu()
                 break
 
+# Game front block
             # Draw game
             draw(game, last_move)
 
@@ -124,6 +123,7 @@ if action == 's':
             string = f'{Colors.bold(player.nickname)} is moving, weapon: ' \
                      f'{Colors.bold(game.weapons.get(player).name)} (row,column) \n--> '
 
+# Game back block
             input_coordinates = input(string)
 
             # Parse input block for specific keys
@@ -146,7 +146,15 @@ if action == 's':
             except GameAreaUnitException:
                 messages.append('This unit is not empty!')
                 continue
+            except GameAreaIndexException:
+                messages.append('You has input a non-existent address.')
+                continue
+            except TypeError as e:
+                error = e.args[0].split(" ")[-1]
+                msg = f'You forgot to provide one argument {error}'
+                messages.append(msg)
 
+# Game front with winner block
             # Check winner block
             if winner:
                 draw(game, last_move, True, winner[1])

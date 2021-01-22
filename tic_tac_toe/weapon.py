@@ -25,3 +25,8 @@ class Empty(Weapon):
 
     def __bool__(self):
         return False
+
+
+class Staff(Weapon):
+    def __init__(self, name):
+        self.name = Colors.bold(name)

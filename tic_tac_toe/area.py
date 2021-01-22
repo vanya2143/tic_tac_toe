@@ -22,7 +22,8 @@ class GameArea:
         self._game_table_size = game_table_size
         self._game_table = self.__create_area(self._empty_obj, self._game_table_size)
 
-    def __create_area(self, item_obj, size):
+    @staticmethod
+    def __create_area(item_obj, size):
         area = []
         for i in range(size):
             area.append([item_obj] * size)

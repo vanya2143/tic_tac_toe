@@ -62,4 +62,5 @@ class Game:
         return f'{self._player1.nickname} vs {self._player2.nickname}'
 
     def __repr__(self):
-        return f'<Game: {self._player1.nickname} ({self.weapons.get(self._player1)}) vs {self._player2.nickname} ({self.weapons.get(self._player2)})>'
+        return f'<Game: {self._player1.nickname} ({self.weapons.get(self._player1)}) vs' \
+               f' {self._player2.nickname} ({self.weapons.get(self._player2)})>'
