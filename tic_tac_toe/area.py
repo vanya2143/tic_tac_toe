@@ -38,7 +38,7 @@ class GameArea:
         return self._free_moves
 
     def player_move(self, row, column, value):
-        if row > self._game_table_size or self._game_table_size < column:
+        if row >= self._game_table_size or self._game_table_size <= column:
             raise GameAreaIndexException('Game area index out of range')
         if self._free_moves:
             if self._game_table[row][column]:
