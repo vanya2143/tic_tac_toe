@@ -41,7 +41,7 @@ def colorize(game_table, win_array: tuple):
 
 
 # Show game
-def draw(game_obj, last_moved, with_color=False, win=None):
+def draw_frame(game_obj, last_moved, _win_obj, msg_tray):
     _last_player = last_moved[0]
     _coordinates = last_moved[1]
 
@@ -49,14 +49,21 @@ def draw(game_obj, last_moved, with_color=False, win=None):
     print(f'{Colors.underline(game_obj)}', f'\nLast move: {_last_player} - {_coordinates}')
 
     # If we have a winner we use colorize()
-    if with_color:
-        print(create_game_map(colorize(game_obj.show_game_table(), win)))
+    if _win_obj:
+        print(create_game_map(colorize(game_obj.show_game_table(), _win_obj[1])))
+        print(f'Winner {player.nickname}, weapon {_win_obj[0].name}')
+        _game_flag = context_menu()
+        return _game_flag
     else:
         print(create_game_map(game_obj.show_game_table()))
 
-    # if not game_obj.free_moves():
-    #     print(f'\n{Colors.reverse("No free moves")}')
-    #     return context_menu()
+    if not game_obj.free_moves():
+        print(f'\n{Colors.reverse("No free moves")}')
+        return context_menu()
+
+    if msg_tray:
+        print(f'\n{Colors.reverse(messages.pop())}')
+        messages.clear()
 
 
 # Show question after game
@@ -108,23 +115,12 @@ if action == 's':
         # Current game loop
         while current_game_flag:
 
-            # Free moves check block
-            if not game.free_moves():
-                draw(game, last_move)
-                print()
-                print(f'{Colors.reverse("No free moves")}')
-
-                game_session_flag = context_menu()
+            flag = draw_frame(game, last_move, winner, messages)  # -> Bool
+            if flag:
                 break
-
-            # Game front block
-            # Draw game
-            draw(game, last_move)
-
-            # Messages block
-            if messages:
-                print(f'\n{Colors.reverse(messages.pop())}')
-                messages.clear()
+            elif not flag:
+                print('Bye!')
+                sys.exit(0)
 
             # Input block
             player = game.get_current_player()
@@ -135,12 +131,8 @@ if action == 's':
             try:
                 input_coordinates = input(string)
             except (EOFError, KeyboardInterrupt):
-                game_session_flag = context_menu()
-                if not game_session_flag:
-                    print('Bye!')
-                    sys.exit(0)
-                else:
-                    break
+                print('Bye!')
+                sys.exit(0)
 
             # Restart game
             if input_coordinates == 'r':
@@ -171,13 +163,3 @@ if action == 's':
                 msg = f'You forgot to provide one argument {error}'
                 messages.append(msg)
                 continue
-
-            # Game front with winner block
-            # Check winner block
-            if winner:
-                draw(game, last_move, True, winner[1])
-                print(f'Winner {player.nickname}, weapon {winner[0].name}')
-
-                # Context menu
-                game_session_flag = context_menu()
-                break
