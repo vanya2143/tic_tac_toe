@@ -42,11 +42,11 @@ def colorize(game_table, win_array: tuple):
 
 # Show game
 def draw(game_obj, last_moved, with_color=False, win=None):
-    last_player = last_moved[0]
-    coordinates = last_moved[1]
+    _last_player = last_moved[0]
+    _coordinates = last_moved[1]
 
     clean_area()
-    print(f'{Colors.underline(game_obj)}', f'\nLast move: {last_player} - {coordinates}')
+    print(f'{Colors.underline(game_obj)}', f'\nLast move: {_last_player} - {_coordinates}')
 
     # If we have a winner we use colorize()
     if with_color:
@@ -142,29 +142,30 @@ if action == 's':
                 else:
                     break
 
-            # Parse input block for specific keys
-            if input_coordinates == 'q':
-                sys.exit(0)
-            elif input_coordinates == 'r':
+            # Restart game
+            if input_coordinates == 'r':
                 break
 
             # Parse input coordinates block
             try:
-                user_coordinates = tuple(map(int, input_coordinates.split(',')))
+                coordinates = tuple(map(int, input_coordinates.split(',')))
             except ValueError:
                 messages.append('Use integers with coma separate: row,column')
                 continue
 
             # Submit users coordinates block
             try:
-                winner = game.move(player, *user_coordinates)  # -> Union[Tuple[list, Any], bool
+                winner = game.move(player, *coordinates)  # -> Union[Tuple[list, Any], bool
                 last_move = player.nickname, input_coordinates
+
             except GameAreaUnitException:
                 messages.append('This unit is not empty!')
                 continue
+
             except GameAreaIndexException:
                 messages.append('You has input a non-existent address.')
                 continue
+
             except TypeError as e:
                 error = e.args[0].split(" ")[-1]
                 msg = f'You forgot to provide one argument {error}'
