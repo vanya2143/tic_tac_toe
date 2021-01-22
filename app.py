@@ -19,7 +19,7 @@ def clean_area():
 def create_game_map(game_table: list):
     game_t = [
         [Staff('#'), Staff('0'), Staff('1'), Staff('2')],
-        [Staff('0')],
+        [Staff('0')],  # row index
         [Staff('1')],
         [Staff('2')]
     ]
@@ -27,7 +27,7 @@ def create_game_map(game_table: list):
     for index, row in enumerate(game_table, 1):
         game_t[index].extend(row)
 
-    # If we have a winner, his weapon object will be replaced to string
+    # If we have a winner his weapon object will be replaced to string because I wont to show it in green :)
     return '\n'.join('  '.join(i.name if issubclass(type(i), Weapon) else i for i in row) for row in game_t)
 
 
@@ -42,11 +42,10 @@ def colorize(game_table, win_array: tuple):
 
 # Show game
 def draw(game_obj, last_moved, with_color=False, win=None):
-    clean_area()
-
     last_player = last_moved[0]
     coordinates = last_moved[1]
 
+    clean_area()
     print(f'{Colors.underline(game_obj)}', f'\nLast move: {last_player} - {coordinates}')
 
     # If we have a winner we use colorize()
@@ -54,6 +53,10 @@ def draw(game_obj, last_moved, with_color=False, win=None):
         print(create_game_map(colorize(game_obj.show_game_table(), win)))
     else:
         print(create_game_map(game_obj.show_game_table()))
+
+    # if not game_obj.free_moves():
+    #     print(f'\n{Colors.reverse("No free moves")}')
+    #     return context_menu()
 
 
 # Show question after game
@@ -65,32 +68,38 @@ def context_menu():
         return False
 
 
-# player1 = input('Enter player1 name: ')
-# player2 = input('Enter player2 name: ')
-#
-# p1 = Player(str(player1))
-# p2 = Player(str(player2))
-
-p1 = Player('Player1')
-p2 = Player('Player2')
+# p1 = Player('Player1')
+# p2 = Player('Player2')
 
 print('')
 print('s to start game')
 print('q exit')
 
-action = str(input('---> '))
+try:
+    action = str(input('---> '))
+except (EOFError, KeyboardInterrupt):
+    print('Bye!')
+    sys.exit(0)
 
 if action == 'q':
     sys.exit(0)
 
 if action == 's':
+    player1 = input('Enter player1 name: ')
+    player2 = input('Enter player2 name: ')
+
+    p1 = Player(str(player1))
+    p2 = Player(str(player2))
+
     # Game session loop
     game_session_flag = True
+
     while game_session_flag:
         # Init game
         game = Game(p1, p2)
         game.start_game()
 
+        # Current game data
         last_move = ['', '']
         winner = False
         messages = []
@@ -108,14 +117,13 @@ if action == 's':
                 game_session_flag = context_menu()
                 break
 
-# Game front block
+            # Game front block
             # Draw game
             draw(game, last_move)
 
             # Messages block
-            print()
             if messages:
-                print(f'{Colors.reverse(messages.pop())}')
+                print(f'\n{Colors.reverse(messages.pop())}')
                 messages.clear()
 
             # Input block
@@ -123,13 +131,21 @@ if action == 's':
             string = f'{Colors.bold(player.nickname)} is moving, weapon: ' \
                      f'{Colors.bold(game.weapons.get(player).name)} (row,column) \n--> '
 
-# Game back block
-            input_coordinates = input(string)
+            # Game back block
+            try:
+                input_coordinates = input(string)
+            except (EOFError, KeyboardInterrupt):
+                game_session_flag = context_menu()
+                if not game_session_flag:
+                    print('Bye!')
+                    sys.exit(0)
+                else:
+                    break
 
             # Parse input block for specific keys
-            if input_coordinates == 'Q':
+            if input_coordinates == 'q':
                 sys.exit(0)
-            elif input_coordinates == 'q':
+            elif input_coordinates == 'r':
                 break
 
             # Parse input coordinates block
@@ -141,7 +157,7 @@ if action == 's':
 
             # Submit users coordinates block
             try:
-                winner = game.move(player, *user_coordinates)  # -> Bool or weapon_obj, Bool
+                winner = game.move(player, *user_coordinates)  # -> Union[Tuple[list, Any], bool
                 last_move = player.nickname, input_coordinates
             except GameAreaUnitException:
                 messages.append('This unit is not empty!')
@@ -153,8 +169,9 @@ if action == 's':
                 error = e.args[0].split(" ")[-1]
                 msg = f'You forgot to provide one argument {error}'
                 messages.append(msg)
+                continue
 
-# Game front with winner block
+            # Game front with winner block
             # Check winner block
             if winner:
                 draw(game, last_move, True, winner[1])
@@ -163,5 +180,3 @@ if action == 's':
                 # Context menu
                 game_session_flag = context_menu()
                 break
-
-            print(f'{"*" * 20}\n\n')
