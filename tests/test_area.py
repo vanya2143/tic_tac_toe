@@ -3,7 +3,6 @@ import pytest
 from tic_tac_toe.area import GameArea
 from tic_tac_toe.area import GameAreaException
 from tic_tac_toe.weapon import Empty, Tic, Tac
-from tic_tac_toe.utils import ref_data
 
 
 # Initial area object
@@ -52,12 +51,12 @@ def test_move_fail_out_of_range(game_area_obj):
     assert game_area_obj.player_move(10, 10, 'x') == GameAreaException
 
 
-# Check winner combinations
-@pytest.mark.area_positive_mark
-def test_check_winner():
-    for moves in ref_data:
-        ga = GameArea()
-        for cur_move, move in enumerate(moves):
-            ga.player_move(move[0], move[1], 'x')
-            if cur_move == 2:
-                assert ga.check_winner() == ('x', moves)
+@pytest.mark.area_negative_mark
+@pytest.mark.xfail(reason='Free moves 0', raises=GameAreaException)
+def test_free_moves_exception():
+    ga = GameArea()
+    for row in range(3):
+        for column in range(3):
+            ga.player_move(row, column, 'x')
+
+    assert ga.player_move(1, 1, 'x') == GameAreaException

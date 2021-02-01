@@ -1,13 +1,14 @@
 import pytest
 
-from tic_tac_toe.game import Game
+from tic_tac_toe.game import Game, GameException
 from tic_tac_toe.player import Player
+from tic_tac_toe.utils import ref_data
 
 
 # Initial players objects
 @pytest.fixture(scope='module')
 def player_obj():
-    return Player('Ivan'), Player('Oleg')
+    return Player('Player1'), Player('Player2')
 
 
 # Initial game object
@@ -16,11 +17,40 @@ def game_obj(player_obj):
     return Game(*player_obj)
 
 
+@pytest.mark.game_positive_mark
 def test_start_game(game_obj):
     game_obj.start_game()
     assert game_obj._game_area is not None
+    assert str(game_obj) == 'Player1 vs Player2'
 
 
+@pytest.mark.game_positive_mark
 def test_players(game_obj):
-    assert game_obj._player1.nickname == 'Ivan'
-    assert game_obj._player2.nickname == 'Oleg'
+    assert game_obj._player1.nickname == 'Player1'
+    assert game_obj._player2.nickname == 'Player2'
+
+
+@pytest.mark.game_positive_mark
+def test_player_move(game_obj):
+    player = game_obj.first_player
+    assert game_obj.move(player, 0, 0) is False
+    assert game_obj.free_moves() == 8  # free moves -=1
+
+
+@pytest.mark.game_negative_mark
+@pytest.mark.xfail(reason='This player has just made a move', raises=GameException)
+def test_player_move_exception(game_obj):
+    player = game_obj.players[0 if game_obj.first_player_index else 1]
+    assert game_obj.move(player, 1, 1) == GameException
+
+
+@pytest.mark.game_positive_mark
+def test_win(player_obj):
+    game = Game(*player_obj)
+    game.start_game()
+
+    assert game.move(game.get_current_player(), 0, 0) is False
+    assert game.move(game.get_current_player(), 1, 0) is False
+    assert game.move(game.get_current_player(), 1, 1) is False
+    assert game.move(game.get_current_player(), 2, 0) is False
+    assert game.move(game.get_current_player(), 2, 2) is not False

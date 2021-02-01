@@ -2,6 +2,7 @@ from random import choice
 
 from .area import GameArea
 from .weapon import Tic, Tac
+from .utils import ref_data, finder
 
 
 class GameException(Exception):
@@ -38,12 +39,15 @@ class Game:
     def start_game(self):
         self._game_area = GameArea()
 
+    def check_winner(self):
+        return finder(self.show_game_table(), ref_data)
+
     def move(self, player_obj, row, column):
         if player_obj == self._last_move:
             raise GameException('This player has just made a move')
 
         self._game_area.player_move(row, column, self.weapons.get(player_obj))
-        winner = self._game_area.check_winner()
+        winner = self.check_winner()
 
         if winner:
             return winner
@@ -51,10 +55,7 @@ class Game:
             self._last_move = player_obj
 
             # Current player flag
-            if self.first_player_index:
-                self.first_player_index = 0
-            else:
-                self.first_player_index = 1
+            self.first_player_index = 0 if self.first_player_index else 1
 
             return False
 
