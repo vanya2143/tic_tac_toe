@@ -1,5 +1,4 @@
 from .weapon import Empty
-from .utils import ref_data, finder
 
 
 class GameAreaException(Exception):
@@ -15,19 +14,11 @@ class GameAreaIndexException(GameAreaException):
 
 
 class GameArea:
-    _free_moves = 9
-
-    def __init__(self, game_table_size=3):
+    def __init__(self):
         self._empty_obj = Empty()
-        self._game_table_size = game_table_size
+        self._game_table_size = 3
+        self._free_moves = 9
         self._game_table = self.__create_area(self._empty_obj, self._game_table_size)
-
-    @staticmethod
-    def __create_area(item_obj, size):
-        area = []
-        for i in range(size):
-            area.append([item_obj] * size)
-        return area
 
     @property
     def show_game_table(self):
@@ -49,8 +40,12 @@ class GameArea:
         else:
             raise GameAreaException('Free moves 0')
 
-    def check_winner(self):
-        return finder(self.show_game_table, ref_data)
+    @staticmethod
+    def __create_area(item_obj, size):
+        area = []
+        for i in range(size):
+            area.append([item_obj] * size)
+        return area
 
     def __repr__(self):
         return f'<Game area {self._game_table}>'
