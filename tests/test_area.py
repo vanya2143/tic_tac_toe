@@ -38,13 +38,6 @@ def test_move_fail_not_empty():
     assert ga.player_move(0, 0, tic) == GameAreaException
 
 
-# TODO Уедет в тесты игрового движка
-@pytest.mark.area_negative_mark
-@pytest.mark.xfail(reason='This weapon does not allowed!', raises=GameAreaException)
-def test_move_fail_allowed_weapon(game_area_obj):
-    pass
-
-
 @pytest.mark.area_negative_mark
 @pytest.mark.xfail(reason='Game area index out of range', raises=GameAreaException)
 def test_move_fail_out_of_range(game_area_obj):
