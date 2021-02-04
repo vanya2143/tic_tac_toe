@@ -4,7 +4,7 @@ import sys
 from tic_tac_toe.game import Game
 from tic_tac_toe.player import Player
 from tic_tac_toe.area import GameAreaUnitException, GameAreaIndexException
-from tic_tac_toe.weapon import Weapon, Staff
+from tic_tac_toe.weapon import Staff
 from tic_tac_toe.utils import Colors
 
 
@@ -19,7 +19,7 @@ def clean_area():
 def create_game_map(game_table: list):
     game_t = [
         [Staff('#'), Staff('0'), Staff('1'), Staff('2')],
-        [Staff('0')],  # row index
+        [Staff('0')],
         [Staff('1')],
         [Staff('2')]
     ]
@@ -28,7 +28,7 @@ def create_game_map(game_table: list):
         game_t[index].extend(row)
 
     # If we have a winner his weapon object will be replaced to string because I wont to show it in green :)
-    return '\n'.join('  '.join(i.name if issubclass(type(i), Weapon) else i for i in row) for row in game_t)
+    return '\n'.join('  '.join(i if isinstance(i, str) else i.name for i in row) for row in game_t)
 
 
 # Set color for win items
@@ -78,9 +78,10 @@ def context_menu():
 # p1 = Player('Player1')
 # p2 = Player('Player2')
 
-print('')
-print('s to start game')
-print('q exit')
+print(f'  Welcome to\n Tic Tac Toe')
+print()
+print('press "s" to start game')
+print('press "q" or "enter" key to exit')
 
 try:
     action = str(input('---> '))
