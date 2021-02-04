@@ -6,5 +6,9 @@ setup(
     name='tic_tac_toe',
     version='1.0',
     packages=find_packages(),
-    long_description=open(join(dirname(__file__), 'README.rst')).read()
+    long_description=open(join(dirname(__file__), 'README.rst')).read(),
+    entry_points={
+        'console_scripts':
+            ['ticapp = tic_tac_toe.app']
+    }
 )
