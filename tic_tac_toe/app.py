@@ -78,10 +78,11 @@ def context_menu():
 # p1 = Player('Player1')
 # p2 = Player('Player2')
 
-print(f'  Welcome to\n Tic Tac Toe')
+print('\nWelcome to\nTic Tac Toe')
 print()
-print('press "s" to start game')
-print('press "q" or "enter" key to exit')
+print('Press:')
+print('"s" to start game')
+print('"q" or "enter" key to exit')
 
 try:
     action = str(input('---> '))
