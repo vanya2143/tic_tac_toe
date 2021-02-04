@@ -1,2 +1,7 @@
 .idea/
 .pytest_cache/
+build/
+dist/
+htmlcov/
+tic_tac_toe.egg-info/
+.coverage
