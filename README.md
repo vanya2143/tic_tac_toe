@@ -20,7 +20,6 @@ sourse .env/bin/activate
 ```
 Setup
 ```
-python3 setup.py sdist
 python3 setup.py install
 ```
 Run in terminal: 
