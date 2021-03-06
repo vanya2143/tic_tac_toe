@@ -1,4 +1,4 @@
-from .weapon import Empty
+from .weapon import Empty, Weapon
 
 
 class GameAreaException(Exception):
@@ -14,11 +14,15 @@ class GameAreaIndexException(GameAreaException):
 
 
 class GameArea:
+    """
+    Class for create GameArea object.
+
+    """
     def __init__(self):
         self._empty_obj = Empty()
-        self._game_table_size = 3
+        self._size = 3
         self._free_moves = 9
-        self._game_table = self.__create_area(self._empty_obj, self._game_table_size)
+        self._game_table = self.__create_game_table(self._empty_obj, self._size)
 
     @property
     def show_game_table(self):
@@ -28,8 +32,10 @@ class GameArea:
     def free_moves(self):
         return self._free_moves
 
-    def player_move(self, row, column, value):
-        if row >= self._game_table_size or self._game_table_size <= column:
+    def player_move(self, row: int, column: int, value: Weapon) -> None:
+        """ Class method for completing the move process and check player move. """
+
+        if row >= self._size or self._size <= column:
             raise GameAreaIndexException('Game area index out of range')
         if self._free_moves:
             if self._game_table[row][column]:
@@ -41,7 +47,7 @@ class GameArea:
             raise GameAreaException('Free moves 0')
 
     @staticmethod
-    def __create_area(item_obj, size):
+    def __create_game_table(item_obj, size):
         area = []
         for i in range(size):
             area.append([item_obj] * size)

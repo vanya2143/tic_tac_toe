@@ -2,6 +2,7 @@ from .utils import Colors
 
 
 class Weapon:
+    """ Class to inheritance for create weapon object """
     name = None
 
     def __str__(self):
@@ -24,6 +25,7 @@ class Empty(Weapon):
     name = '.'
 
     def __bool__(self):
+        """ Class method for emulate empty weapon object. """
         return False
 
 

@@ -1,3 +1,8 @@
+"""
+This is a command line client application for the Tic Tac Toe game.
+
+"""
+
 import os
 import sys
 
@@ -15,7 +20,7 @@ def clean_area():
         os.system('clear')
 
 
-# Add staff data to game table
+# Add additional information to game table
 def create_game_map(game_table: list):
     game_t = [
         [Staff('#'), Staff('0'), Staff('1'), Staff('2')],
@@ -27,7 +32,7 @@ def create_game_map(game_table: list):
     for index, row in enumerate(game_table, 1):
         game_t[index].extend(row)
 
-    # If we have a winner his weapon object will be replaced to string because I wont to show it in green :)
+    # If we have a winner, his weapon object will be replaced with a string because I want to show it in green :)
     return '\n'.join('  '.join(i if isinstance(i, str) else i.name for i in row) for row in game_t)
 
 
@@ -35,7 +40,7 @@ def create_game_map(game_table: list):
 def colorize(game_table, win_array: tuple):
     for row in win_array:
         item = game_table[row[0]][row[1]]
-        game_table[row[0]][row[1]] = Colors.to_green(item.name)
+        game_table[row[0]][row[1]] = Colors.green(item.name)
 
     return game_table
 
@@ -48,7 +53,7 @@ def draw_frame(game_obj, last_moved, _win_obj, msg_tray):
     clean_area()
     print(f'{Colors.underline(game_obj)}', f'\nLast move: {_last_player} - {_coordinates}')
 
-    # If we have a winner we use colorize()
+    # If we have a winner, we use colorize()
     if _win_obj:
         print(create_game_map(colorize(game_obj.show_game_table(), _win_obj[1])), end='\n\n')
         print(f'Winner {player.nickname}, weapon {_win_obj[0].name}')
@@ -74,9 +79,6 @@ def context_menu():
     else:
         return False
 
-
-# p1 = Player('Player1')
-# p2 = Player('Player2')
 
 print('\nWelcome to\nTic Tac Toe')
 print()
@@ -117,7 +119,7 @@ if action == 's':
         # Current game loop
         while current_game_flag:
             # Show current game
-            flag = draw_frame(game, last_move, winner, messages)  # -> Bool
+            flag = draw_frame(game, last_move, winner, messages)
             if flag:
                 break
             elif not flag and flag is not None:

@@ -2,7 +2,7 @@ from random import choice
 
 from .area import GameArea
 from .weapon import Tic, Tac
-from .utils import ref_data, finder
+from .utils import find_winner_combination
 
 
 class GameException(Exception):
@@ -10,6 +10,13 @@ class GameException(Exception):
 
 
 class Game:
+    """
+    Class for create Game object.
+
+    This is the main class for create a game Tic Tac Toe.
+    To work with this class, you need to create a client application,
+    for example app.py.
+    """
     _game_area = None
     _last_move = None
 
@@ -40,9 +47,11 @@ class Game:
         self._game_area = GameArea()
 
     def check_winner(self):
-        return finder(self.show_game_table(), ref_data)
+        return find_winner_combination(self.show_game_table())
 
     def move(self, player_obj, row, column):
+        """ Class method for completing the move process and check player move. """
+
         if player_obj == self._last_move:
             raise GameException('This player has just made a move')
 
@@ -59,9 +68,9 @@ class Game:
 
             return False
 
-    def __str__(self):
-        return f'{self._player1.nickname} vs {self._player2.nickname}'
-
     def __repr__(self):
         return f'<Game: {self._player1.nickname} ({self.weapons.get(self._player1)}) vs' \
                f' {self._player2.nickname} ({self.weapons.get(self._player2)})>'
+
+    def __str__(self):
+        return f'{self._player1.nickname} vs {self._player2.nickname}'

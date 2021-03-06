@@ -2,7 +2,7 @@ import pytest
 
 from tic_tac_toe.game import Game, GameException
 from tic_tac_toe.player import Player
-from tic_tac_toe.utils import ref_data
+from tic_tac_toe.utils import winner_checklist
 
 
 # Initial players objects

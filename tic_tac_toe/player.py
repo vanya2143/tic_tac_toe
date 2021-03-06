@@ -1,4 +1,6 @@
 class Player:
+    """ Class  for create a player object """
+
     def __init__(self, nickname):
         self._nickname = nickname
         self._games = []
