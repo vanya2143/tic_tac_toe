@@ -1,16 +1,7 @@
+from .exceptions import GameAreaIndexException
+from .exceptions import GameAreaUnitException
+from .exceptions import GameAreaException
 from .weapon import Empty, Weapon
-
-
-class GameAreaException(Exception):
-    pass
-
-
-class GameAreaUnitException(GameAreaException):
-    pass
-
-
-class GameAreaIndexException(GameAreaException):
-    pass
 
 
 class GameArea:
@@ -18,6 +9,7 @@ class GameArea:
     Class for create GameArea object.
 
     """
+
     def __init__(self):
         self._empty_obj = Empty()
         self._size = 3

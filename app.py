@@ -8,7 +8,7 @@ import sys
 
 from tic_tac_toe.game import Game
 from tic_tac_toe.player import Player
-from tic_tac_toe.area import GameAreaUnitException, GameAreaIndexException
+from tic_tac_toe.exceptions import GameAreaUnitException, GameAreaIndexException
 from tic_tac_toe.weapon import Staff
 from tic_tac_toe.utils import Colors
 
@@ -21,7 +21,12 @@ def clean_area():
 
 
 # Add additional information to game table
-def create_game_map(game_table: list):
+def create_game_map(game_table: list) -> str:
+    """
+
+    :param game_table: game_table list
+    :return: game table in string representation.
+    """
     game_t = [
         [Staff('#'), Staff('0'), Staff('1'), Staff('2')],
         [Staff('0')],
@@ -45,8 +50,8 @@ def colorize(game_table, win_array: tuple):
     return game_table
 
 
-# Show game
-def draw_frame(game_obj, last_moved, _win_obj, msg_tray):
+# Show game in command line interface
+def show_game(game_obj, last_moved, _win_obj, msg_tray):
     _last_player = last_moved[0]
     _coordinates = last_moved[1]
 
@@ -83,8 +88,8 @@ def context_menu():
 print('\nWelcome to\nTic Tac Toe')
 print()
 print('Press:')
-print('"s" to start game')
-print('"q" or "enter" key to exit')
+print('s to start game')
+print('q or "enter" key to exit')
 
 try:
     action = str(input('---> '))
@@ -119,7 +124,7 @@ if action == 's':
         # Current game loop
         while current_game_flag:
             # Show current game
-            flag = draw_frame(game, last_move, winner, messages)
+            flag = show_game(game, last_move, winner, messages)
             if flag:
                 break
             elif not flag and flag is not None:

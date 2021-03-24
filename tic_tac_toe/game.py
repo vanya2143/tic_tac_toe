@@ -1,12 +1,9 @@
 from random import choice
 
 from .area import GameArea
+from .exceptions import GameException
 from .weapon import Tic, Tac
 from .utils import find_winner_combination
-
-
-class GameException(Exception):
-    pass
 
 
 class Game:
