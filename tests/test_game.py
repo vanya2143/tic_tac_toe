@@ -33,7 +33,7 @@ def test_players(game_obj):
 @pytest.mark.game_positive_mark
 def test_player_move(game_obj):
     player = game_obj.first_player
-    assert game_obj.move(player, 0, 0) is False
+    assert game_obj.set_move(player, 0, 0) is False
     assert game_obj.free_moves() == 8
 
 
@@ -41,7 +41,7 @@ def test_player_move(game_obj):
 @pytest.mark.xfail(reason='This player has just made a move', raises=GameException)
 def test_player_move_exception(game_obj):
     player = game_obj.players[0 if game_obj.first_player_index else 1]
-    assert game_obj.move(player, 1, 1) == GameException
+    assert game_obj.set_move(player, 1, 1) == GameException
 
 
 @pytest.mark.game_positive_mark
@@ -49,8 +49,8 @@ def test_win(player_obj):
     game = Game(*player_obj)
     game.start_game()
 
-    assert game.move(game.get_current_player(), 0, 0) is False
-    assert game.move(game.get_current_player(), 1, 0) is False
-    assert game.move(game.get_current_player(), 1, 1) is False
-    assert game.move(game.get_current_player(), 2, 0) is False
-    assert game.move(game.get_current_player(), 2, 2) is not False
+    assert game.set_move(game.get_current_player(), 0, 0) is False
+    assert game.set_move(game.get_current_player(), 1, 0) is False
+    assert game.set_move(game.get_current_player(), 1, 1) is False
+    assert game.set_move(game.get_current_player(), 2, 0) is False
+    assert game.set_move(game.get_current_player(), 2, 2) is not False

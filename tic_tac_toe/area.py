@@ -1,45 +1,49 @@
 from .exceptions import GameAreaIndexException
 from .exceptions import GameAreaUnitException
-from .exceptions import GameAreaException
 from .weapon import Empty, Weapon
 
 
 class GameArea:
     """
-    Class for create GameArea object.
+    Class for creation GameArea object.
 
     """
 
     def __init__(self):
         self._empty_obj = Empty()
         self._size = 3
-        self._free_moves = 9
-        self._game_table = self.__create_game_table(self._empty_obj, self._size)
+        self._game_table = self.__create_game_area(self._empty_obj, self._size)
 
     @property
     def show_game_table(self):
         return self._game_table
 
-    @property
-    def free_moves(self):
-        return self._free_moves
+    def set_player_move(self, row: int, column: int, value: Weapon):
+        """
+        Method for checking the game area for a free unit.
 
-    def player_move(self, row: int, column: int, value: Weapon) -> None:
-        """ Class method for completing the move process and check player move. """
+        :param row: row index in game area
+        :param column: column index in game area
+        :param value: player weapon object
+        :return: None
+        """
 
         if row >= self._size or self._size <= column:
             raise GameAreaIndexException('Game area index out of range')
-        if self._free_moves:
-            if self._game_table[row][column]:
-                raise GameAreaUnitException('Unit not empty')
+        if self._game_table[row][column]:
+            raise GameAreaUnitException('Unit not empty')
 
-            self._game_table[row][column] = value
-            self._free_moves -= 1
-        else:
-            raise GameAreaException('Free moves 0')
+        self._game_table[row][column] = value
 
     @staticmethod
-    def __create_game_table(item_obj, size):
+    def __create_game_area(item_obj, size) -> list:
+        """
+        Method for creating a game area with special size and objects.
+
+        :param item_obj: Empty object
+        :param size: size of area
+        :return: list of game area
+        """
         area = []
         for i in range(size):
             area.append([item_obj] * size)

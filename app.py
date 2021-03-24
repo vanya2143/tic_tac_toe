@@ -154,7 +154,7 @@ if action == 's':
 
             # Submit users coordinates
             try:
-                winner = game.move(player, *coordinates)  # -> Union[Tuple[list, Any], bool
+                winner = game.set_move(player, *coordinates)
                 last_move = player.nickname, input_coordinates
 
             except GameAreaUnitException:

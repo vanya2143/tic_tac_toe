@@ -8,19 +8,20 @@ from .utils import find_winner_combination
 
 class Game:
     """
-    Class for create Game object.
+    Class for creation Game object.
 
-    This is the main class for create a game Tic Tac Toe.
-    To work with this class, you need to create a client application,
-    for example app.py.
+    This is the main class for creating the Tic-Tac-Toe game.
+    To work with this class, you need to create a client application like app.py.
     """
-    _game_area = None
-    _last_move = None
 
     def __init__(self, player1, player2):
         self._weapons = [Tic(), Tac()]
         self._player1 = player1
         self._player2 = player2
+        self._free_moves = 9
+        self.__find_winner = find_winner_combination
+        self._game_area = None
+        self._last_move = None
 
         # Equipment players of random weapon
         self.weapons = {
@@ -38,30 +39,36 @@ class Game:
         return self._game_area.show_game_table
 
     def free_moves(self):
-        return self._game_area.free_moves
+        return self._free_moves
 
     def start_game(self):
         self._game_area = GameArea()
 
-    def check_winner(self):
-        return find_winner_combination(self.show_game_table())
+    def _check_winner(self):
+        return self.__find_winner(self.show_game_table())
 
-    def move(self, player_obj, row, column):
-        """ Class method for completing the move process and check player move. """
+    def set_move(self, player_obj, row, column):
+        """
+        Method for completing the turn process and checking the player's turn.
+        """
+
+        if self._free_moves == 0:
+            return GameException('No free moves')
 
         if player_obj == self._last_move:
             raise GameException('This player has just made a move')
 
-        self._game_area.player_move(row, column, self.weapons.get(player_obj))
-        winner = self.check_winner()
+        self._game_area.set_player_move(row, column, self.weapons.get(player_obj))
+        winner = self._check_winner()
 
         if winner:
             return winner
         else:
             self._last_move = player_obj
 
-            # Current player flag
+            # Set player flag
             self.first_player_index = 0 if self.first_player_index else 1
+            self._free_moves -= 1
 
             return False
 

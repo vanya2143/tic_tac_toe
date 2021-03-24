@@ -19,9 +19,9 @@ def test_game_table(game_area_obj):
 # Test move
 @pytest.mark.area_positive_mark
 def test_move(game_area_obj):
-    _ = game_area_obj.player_move(0, 0, 'x')
-    _ = game_area_obj.player_move(1, 1, 'o')
-    _ = game_area_obj.player_move(2, 2, 'x')
+    _ = game_area_obj.set_player_move(0, 0, 'x')
+    _ = game_area_obj.set_player_move(1, 1, 'o')
+    _ = game_area_obj.set_player_move(2, 2, 'x')
 
     assert game_area_obj.show_game_table[0][0] == 'x'
     assert game_area_obj.show_game_table[1][1] == 'o'
@@ -33,15 +33,15 @@ def test_move(game_area_obj):
 def test_move_fail_not_empty():
     ga = GameArea()
     tic = Tic()
-    ga.player_move(0, 0, tic)
+    ga.set_player_move(0, 0, tic)
 
-    assert ga.player_move(0, 0, tic) == GameAreaException
+    assert ga.set_player_move(0, 0, tic) == GameAreaException
 
 
 @pytest.mark.area_negative_mark
 @pytest.mark.xfail(reason='Game area index out of range', raises=GameAreaException)
 def test_move_fail_out_of_range(game_area_obj):
-    assert game_area_obj.player_move(10, 10, 'x') == GameAreaException
+    assert game_area_obj.set_player_move(10, 10, 'x') == GameAreaException
 
 
 @pytest.mark.area_negative_mark
@@ -50,6 +50,6 @@ def test_free_moves_exception():
     ga = GameArea()
     for row in range(3):
         for column in range(3):
-            ga.player_move(row, column, 'x')
+            ga.set_player_move(row, column, 'x')
 
-    assert ga.player_move(1, 1, 'x') == GameAreaException
+    assert ga.set_player_move(1, 1, 'x') == GameAreaException
