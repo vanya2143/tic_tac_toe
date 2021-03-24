@@ -1,8 +1,8 @@
 import pytest
 
-from tic_tac_toe.game import Game, GameException
+from tic_tac_toe.game import Game
+from tic_tac_toe.exceptions import GameException
 from tic_tac_toe.player import Player
-from tic_tac_toe.utils import winner_checklist
 
 
 # Initial players objects
@@ -34,7 +34,7 @@ def test_players(game_obj):
 def test_player_move(game_obj):
     player = game_obj.first_player
     assert game_obj.move(player, 0, 0) is False
-    assert game_obj.free_moves() == 8  # free moves -=1
+    assert game_obj.free_moves() == 8
 
 
 @pytest.mark.game_negative_mark

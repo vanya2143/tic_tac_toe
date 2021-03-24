@@ -1,7 +1,7 @@
 import pytest
 
 from tic_tac_toe.area import GameArea
-from tic_tac_toe.area import GameAreaException
+from tic_tac_toe.exceptions import GameAreaException
 from tic_tac_toe.weapon import Empty, Tic, Tac
 
 
